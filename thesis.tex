@@ -12,12 +12,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \documentclass[a4paper,11pt,oneside]{report}
 % Options: MScThesis, BScThesis, MScProject, BScProject
-\usepackage[MScThesis,lablogo]{EPFLreport}
+\usepackage[BScThesis,lablogo]{EPFLreport}
 \usepackage{xspace}
 
 \title{A wonderful thesis\\about the merits of scientific writing}
-\author{The Student}
-\supervisor{The Doctoral Student}
+\author{Hassan Habib}
+\supervisor{Nicolas Badoux}
 \adviser{Prof. Dr. sc. ETH Mathias Payer}
 %\coadviser{Second Adviser}
 \expert{The External Reviewer}
@@ -40,10 +40,10 @@ insufficient, what the high-level intuition of your work is, maybe a neat
 design or implementation decision, and key results of your evaluation.
 \end{abstract}
 
-\begin{frenchabstract}
-For a doctoral thesis, you have to provide a French translation of the
-English abstract. For other projects this is optional.
-\end{frenchabstract}
+%\begin{frenchabstract}
+%For a doctoral thesis, you have to provide a French translation of the
+%English abstract. For other projects this is optional.
+%\end{frenchabstract}
 
 \maketoc
 
@@ -67,11 +67,44 @@ This section is usually 3-5 pages.
 \chapter{Background}
 %%%%%%%%%%%%%%%%%%%%
 
-The background section introduces the necessary background to understand your
-work. This is not necessarily related work but technologies and dependencies
-that must be resolved to understand your design and implementation.
+Computer programs can be executed in two different ways: they can be interpreted
+by a software (an interpreter) or they can be compiled into machine code that can
+be then be executed by the hardware.
 
-This section is usually 3-5 pages.
+In the second approach, a compiler is needed to translate the source code into binary code.
+Let's have a quick overview of what is contained in a binary executable.
+
+
+\section{Binary executable}
+\subsection{ELF format}
+%source man page elf
+The dominant executable format for binary in Unix system is the ELF\footnote{Executable
+and Linkable Format} format. 
+
+An executable file respecting the ELF format must follow a certain layout. At
+first it must have an ELF header followed by a program header table or a section
+header table, or both. 
+
+There exist multiple tools that can be used to display information about an ELF file. 
+
+\subsection{DWARF Debugging format}
+%https://dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf
+\subsubsection{Stripped binary}
+
+\subsection{Some definitions}
+\subsubsection{Position independent executables}
+%https://www.redhat.com/en/blog/position-independent-executables-pie
+
+\section{Binary rewritting}
+\subsection{Dynaminc rewritting}
+\subsection{Static rewritting}
+\subsubsection{Algorithm (4 steps)}
+\subsubsection{Parsing}
+\subsubsection{Analysis}
+\subsubsection{Transformation}
+\subsubsection{Code generation}
+
+
 
 
 %%%%%%%%%%%%%%%%
