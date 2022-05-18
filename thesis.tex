@@ -70,15 +70,6 @@ This section is usually 3-5 pages.
 In this section, we will give a little bit of backround in order to understand
 the experience
 
-\section{Binary rewritting}
-Binary rewritting consists of modifying without the source code an executable
-in a way that the program still behave as expected. It can be used for multiple
-reasons as for example for program optimization, program obfuscation or as in
-the case of Retriwrite for security policy enforcement. 
-%show example of obfuscation
-
-
-
 \section{Compiler}
 Computer programs can be executed in two different ways: they can be interpreted
 by a software (an interpreter) or they can be compiled into machine code that can
@@ -99,21 +90,43 @@ header table, or both.
 
 There exist multiple tools that can be used to display information about an ELF file. 
 
-\subsection{Debugging format}
-%https://dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf
-TODO: telling that some binary have debugging information that can be needed for rewritting
-\subsubsection{Stripped binary}
-Needed for retrowrite
-
-\subsection{Some definitions}
-\subsubsection{Position independent executables}
-also needed for retrowrite
-%https://www.redhat.com/en/blog/position-independent-executables-pie
-
 \section{Binary rewritting}
-\subsection{Dynaminc rewritting}
-\subsection{Static rewritting}
-\subsection{4 steps}
+Binary rewritting consists of modifying without the source code an executable
+in a way that the program still behave as expected. It can be used for multiple
+reasons as for example for program optimization, program obfuscation or as in
+the case of Retriwrite for security policy enforcement. 
+%show example of obfuscation
+
+Binary rewritter can be divided into two main approach: Dynamic instrumetation
+and static instrumentation
+
+\subsection{Dynamic instrumentation}
+In this scheme, the rewritting is done while the program is executed. In order
+to analyse the binary during the execution, it uses the PTRACE API in Linux for
+example.  Only the parts executed can be analysed and rewritten.
+\subsection{Static instrumentation}
+Here, the rewritter operates on binaries stored in persistent memory
+(executables that are not being run). In outputs a new binary executable that
+corresponds to the initial executable but rewritten. these executables have the
+advantage of being almost as fast as the original executable that would have
+been compiled for instrumentation.
+\subsection{Four steps}
+There is mainly four steps for binary rewritting:
+\begin{enumerate}
+    \item Parsing
+        %elaborate
+    \item Analysis
+        %elaborate
+    \item Transformation
+        %elaborate
+    \item Code generation
+        %elaborate
+\end{enumerate}
+\subsection{Techniques}
+There are several techniques for the transformation parts. 
+
+
+
 
 
 \section{Retrowrite}
