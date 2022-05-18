@@ -15,19 +15,19 @@
 \usepackage[BScThesis,lablogo]{EPFLreport}
 \usepackage{xspace}
 
-\title{A wonderful thesis\\about the merits of scientific writing}
+\title{Retrofitting defences to C++ code}
 \author{Hassan Habib}
 \supervisor{Nicolas Badoux}
 \adviser{Prof. Dr. sc. ETH Mathias Payer}
 %\coadviser{Second Adviser}
-\expert{The External Reviewer}
+%\expert{The External Reviewer}
 
-\newcommand{\sysname}{FooSystem\xspace}
+\newcommand{\sysname}{Retrowrite\xspace}
 
 \begin{document}
 \maketitle
-\makededication
-\makeacks
+%\makededication
+%\makeacks
 
 \begin{abstract}
 The \sysname tool enables lateral decomposition of a multi-dimensional
@@ -38,6 +38,7 @@ Your abstract should cover at least the following topics, 1-2 sentences for
 each: what area you are in, the problem you focus on, why existing work is
 insufficient, what the high-level intuition of your work is, maybe a neat
 design or implementation decision, and key results of your evaluation.
+
 \end{abstract}
 
 %\begin{frenchabstract}
@@ -66,14 +67,25 @@ This section is usually 3-5 pages.
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Background}
 %%%%%%%%%%%%%%%%%%%%
+In this section, we will give a little bit of backround in order to understand
+the experience
 
+\section{Binary rewritting}
+Binary rewritting consists of modifying without the source code an executable
+in a way that the program still behave as expected. It can be used for multiple
+reasons as for example for program optimization, program obfuscation or as in
+the case of Retriwrite for security policy enforcement. 
+%show example of obfuscation
+
+
+
+\section{Compiler}
 Computer programs can be executed in two different ways: they can be interpreted
 by a software (an interpreter) or they can be compiled into machine code that can
 be then be executed by the hardware.
 
 In the second approach, a compiler is needed to translate the source code into binary code.
 Let's have a quick overview of what is contained in a binary executable.
-
 
 \section{Binary executable}
 \subsection{ELF format}
@@ -87,71 +99,63 @@ header table, or both.
 
 There exist multiple tools that can be used to display information about an ELF file. 
 
-\subsection{DWARF Debugging format}
+\subsection{Debugging format}
 %https://dwarfstd.org/doc/Debugging%20using%20DWARF-2012.pdf
+TODO: telling that some binary have debugging information that can be needed for rewritting
 \subsubsection{Stripped binary}
+Needed for retrowrite
 
 \subsection{Some definitions}
 \subsubsection{Position independent executables}
+also needed for retrowrite
 %https://www.redhat.com/en/blog/position-independent-executables-pie
 
 \section{Binary rewritting}
 \subsection{Dynaminc rewritting}
 \subsection{Static rewritting}
-\subsubsection{Algorithm (4 steps)}
-\subsubsection{Parsing}
-\subsubsection{Analysis}
-\subsubsection{Transformation}
-\subsubsection{Code generation}
+\subsection{4 steps}
 
+
+\section{Retrowrite}
+Speak about retrowrite. What it can do and what it cannot do (maybe in challenges)
 
 
 
 %%%%%%%%%%%%%%%%
-\chapter{Design}
+\chapter{Challenges=Goal}
 %%%%%%%%%%%%%%%%
+Speaking about state of the art rewritter, and mostly
+speak about retrowrite
 
-Introduce and discuss the design decisions that you made during this project.
-Highlight why individual decisions are important and/or necessary. Discuss
-how the design fits together.
-
-This section is usually 5-10 pages.
-
+I will explain the main issue with C++
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Implementation}
 %%%%%%%%%%%%%%%%%%%%%%%%
+Where I speak about the testing part. How I got the c++ packages, the issue with them
+I can first explain the experiment where a test a bunch of debian packages and
+then I can take specific program and test them manually
 
-The implementation covers some of the implementation details of your project.
-This is not intended to be a low level description of every line of code that
-you wrote but covers the implementation aspects of the projects.
+I can choose specific program (bitcoind) and show the exact problems
 
-This section is usually 3-5 pages.
+I can also on simple program written by me where it
+doesn't work (exception)
 
 
-%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%
 \chapter{Evaluation}
-%%%%%%%%%%%%%%%%%%%%
-
-In the evaluation you convince the reader that your design works as intended.
-Describe the evaluation setup, the designed experiments, and how the
-experiments showcase the individual points you want to prove.
-
-This section is usually 5-10 pages.
+%%%%%%%%%%%%%%%%%%%
+I can show graph about debian packages, and also explain the main issue with the big program
 
 
-%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Related Work}
-%%%%%%%%%%%%%%%%%%%%%%
 
-The related work section covers closely related work. Here you can highlight
-the related work, how it solved the problem, and why it solved a different
-problem. Do not play down the importance of related work, all of these
-systems have been published and evaluated! Say what is different and how
-you overcome some of the weaknesses of related work by discussing the 
-trade-offs. Stay positive!
+%%%%%%%%%%%%%%%%%%%%%%%
+%\chapter{Related Work}
+%%%%%%%%%%%%%%%%%%%%%%%
+%
+%I can cite other rewritter.
 
-This section is usually 3-5 pages.
 
 
 %%%%%%%%%%%%%%%%%%%%
