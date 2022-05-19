@@ -90,6 +90,10 @@ header table, or both.
 
 There exist multiple tools that can be used to display information about an ELF file. 
 
+
+
+Sometimes, we do not have access to the source code but we want to modify the program for multiple reasons that will be listed later. In this cas we can use binary rewritting.
+
 \section{Binary rewritting}
 Binary rewritting consists of modifying without the source code an executable
 in a way that the program still behave as expected. It can be used for multiple
@@ -113,17 +117,37 @@ been compiled for instrumentation.
 \subsection{Four steps}
 There is mainly four steps for binary rewritting:
 \begin{enumerate}
-    \item Parsing
+    \item Parsing:
+         This step consist of obtaining the instruction stream from the binary
+         and pass it to a disassembler.
         %elaborate
-    \item Analysis
+    \item Analysis:
         %elaborate
-    \item Transformation
+        This part consists of gaining as much information as possible
+    \item Transformation:
         %elaborate
-    \item Code generation
+        Here, we must find all the locations where  code must be added. 
+    \item Code generation:
         %elaborate
+        Here we have to make sure that adding the code does not modify the
+        behaviour of the executable (the modified code must run as the
+        original). There are multiple techniques for this part.
 \end{enumerate}
-\subsection{Techniques}
-There are several techniques for the transformation parts. 
+\subsection{Code genreation techniques}
+There are multiples techniques for the transformation and code generation
+parts. The simplest techniques is called \textit{Trampoline}. All new code are
+added in new sections in the binary. Branches are then added to redirect to the
+right location after an instrumentation point. In this techniques, no reference
+or branches are broken.
+
+Another technique is nammed \textit{Direct}. This is one of the oldest
+technique.Here the code is simply overwritten. We have to make sure to reajust
+every braches and references.
+
+
+The technique used by \textit{Retrowrite} is called \texit{Symbolization}. It
+consist of transforming the binary into an assembly text file. It transforms all references constants into assembly labels. Then many tools can instert instrumentation into the reassembled file. Unlike the trampoline technique, this method is defined as being \textit{zero-overhead}
+%add example of symbolization
 
 
 
