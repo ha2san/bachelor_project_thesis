@@ -140,13 +140,16 @@ added in new sections in the binary. Branches are then added to redirect to the
 right location after an instrumentation point. In this techniques, no reference
 or branches are broken.
 
-Another technique is nammed \textit{Direct}. This is one of the oldest
-technique.Here the code is simply overwritten. We have to make sure to reajust
+Another technique is named \textit{Direct}. This is one of the oldest
+technique. Here the code is simply overwritten. We have to make sure to reajust
 every braches and references.
 
 
-The technique used by \textit{Retrowrite} is called \texit{Symbolization}. It
-consist of transforming the binary into an assembly text file. It transforms all references constants into assembly labels. Then many tools can instert instrumentation into the reassembled file. Unlike the trampoline technique, this method is defined as being \textit{zero-overhead}
+The technique used by \textit{Retrowrite} is called \textit{Symbolization}. It
+consist of transforming the binary into an assembly text file. It transforms
+all references constants into assembly labels. Then many tools can instert
+instrumentation into the reassembled file. Unlike the trampoline technique,
+this method is defined as being \textit{zero-overhead}
 %add example of symbolization
 
 
@@ -154,8 +157,11 @@ consist of transforming the binary into an assembly text file. It transforms all
 
 
 \section{Retrowrite}
-Speak about retrowrite. What it can do and what it cannot do (maybe in challenges)
-
+Retrowrite is a binary rewritter developped by HexHive. It uses the
+symbolization technique by generating re-assembleable assembly. Their approach
+is sound by construction because they use relocations, PC-relative addressing,
+and recovered control flow to determine reference constants and symbolize them.
+It uses \textit{Capstone} as a disassembler and \textit{pyelftools} as a binary parser.
 
 
 %%%%%%%%%%%%%%%%
@@ -165,26 +171,34 @@ Speaking about state of the art rewritter, and mostly
 speak about retrowrite
 
 I will explain the main issue with C++
+%speak about retrowrite -> c
+%commit for c++
+%my goal: test the programms on a lot of packages
+%        find a common pattern
+%        test specific application
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Implementation}
 %%%%%%%%%%%%%%%%%%%%%%%%
-Where I speak about the testing part. How I got the c++ packages, the issue with them
-I can first explain the experiment where a test a bunch of debian packages and
-then I can take specific program and test them manually
 
-I can choose specific program (bitcoind) and show the exact problems
+%give github link
+%explain each scripts
+%explain how I get the list of packages
+%how I filter them
+%Why I used docker
+%Explain how I filter the result
 
-I can also on simple program written by me where it
-doesn't work (exception)
-
+%explain how I choose the three prorgams
 
 
 %%%%%%%%%%%%%%%%%%%
 \chapter{Evaluation}
 %%%%%%%%%%%%%%%%%%%
-I can show graph about debian packages, and also explain the main issue with the big program
 
+%show table or graph about popular packages
+%show table or graph about all tested packages
+%show errors with three tested program
+%interpret result
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
