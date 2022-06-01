@@ -30,14 +30,14 @@
 %\makeacks
 
 \begin{abstract}
-The \sysname tool enables lateral decomposition of a multi-dimensional
-flux compensator along the timing and space axes.
+    The \sysname tool enables lateral decomposition of a multi-dimensional
+    flux compensator along the timing and space axes.
 
-The abstract serves as an executive summary of your project.
-Your abstract should cover at least the following topics, 1-2 sentences for
-each: what area you are in, the problem you focus on, why existing work is
-insufficient, what the high-level intuition of your work is, maybe a neat
-design or implementation decision, and key results of your evaluation.
+    The abstract serves as an executive summary of your project.
+    Your abstract should cover at least the following topics, 1-2 sentences for
+    each: what area you are in, the problem you focus on, why existing work is
+    insufficient, what the high-level intuition of your work is, maybe a neat
+    design or implementation decision, and key results of your evaluation.
 
 \end{abstract}
 
@@ -81,6 +81,7 @@ Let's have a quick overview of what is contained in a binary executable.
 \section{Binary executable}
 \subsection{ELF format}
 %source man page elf
+%
 The dominant executable format for binary in Unix system is the ELF\footnote{Executable
 and Linkable Format} format. 
 
@@ -90,36 +91,49 @@ header table, or both.
 
 There exist multiple tools that can be used to display information about an ELF file. 
 
-
-
-Sometimes, we do not have access to the source code but we want to modify the program for multiple reasons that will be listed later. In this cas we can use binary rewritting.
+Sometimes, we do not have access to the source code but we want to modify the
+program for multiple reasons that will be listed later. In this cas we can use
+binary rewritting.
 
 \section{Binary rewritting}
+%%Pourquoi c'est important ???
 Binary rewritting consists of modifying without the source code an executable
 in a way that the program still behave as expected. It can be used for multiple
 reasons as for example for program optimization, program obfuscation or as in
-the case of Retriwrite for security policy enforcement. 
+the case of Retriwrite for security policy enforcement (instrumentation). 
+
+A way to test a software is by using a technique named \textit{fuzzing}. In
+order to catch bugs, one might want to compile the program with an address
+sanitizer as \textit{ASan}~\cite{ASan} as they are often based on compiler instrumentation.
+In the case where the source code is no longer available, the use of a binary
+rewritter as for example \textit{Retrowrite}~\cite{dinesh20oakland} might be useful.
 %show example of obfuscation
 
 Binary rewritter can be divided into two main approach: Dynamic instrumetation
 and static instrumentation
 
 \subsection{Dynamic instrumentation}
-In this scheme, the rewritting is done while the program is executed. In order
-to analyse the binary during the execution, it uses the PTRACE API in Linux for
-example.  Only the parts executed can be analysed and rewritten.
+%%executer virtuellement le programe
+In this scheme, the rewritting is done while the program is executed. Usually
+the binary is executed side by side with the rewritter engine. In order
+to analyse the binary during the execution, the rewritter might use the OS's
+primitves as the PTRACE API in Linux for example.  Only the parts executed can
+be analysed and rewritten so they can focused and the most important part.
 \subsection{Static instrumentation}
 Here, the rewritter operates on binaries stored in persistent memory
 (executables that are not being run). In outputs a new binary executable that
 corresponds to the initial executable but rewritten. these executables have the
 advantage of being almost as fast as the original executable that would have
 been compiled for instrumentation.
-\subsection{Four steps}
-There is mainly four steps for binary rewritting:
+
+
+
+\subsection{Steps in binary rewritting}
+Both dynamic and static instrumentation follow four main steps:
 \begin{enumerate}
     \item Parsing:
-         This step consist of obtaining the instruction stream from the binary
-         and pass it to a disassembler.
+        This step consist of obtaining the instruction stream from the binary
+        and pass it to a disassembler.
         %elaborate
     \item Analysis:
         %elaborate
@@ -133,6 +147,12 @@ There is mainly four steps for binary rewritting:
         behaviour of the executable (the modified code must run as the
         original). There are multiple techniques for this part.
 \end{enumerate}
+%add a figure
+\begin{figure}[h]
+    \includegraphics[width=\linewidth]{required_steps.png}
+    \caption{Required steps for binary rewritting}
+    \label{fig:steps}
+  \end{figure}
 \subsection{Code genreation techniques}
 There are multiples techniques for the transformation and code generation
 parts. The simplest techniques is called \textit{Trampoline}. All new code are
@@ -152,12 +172,9 @@ instrumentation into the reassembled file. Unlike the trampoline technique,
 this method is defined as being \textit{zero-overhead}
 %add example of symbolization
 
-
-
-
-
 \section{Retrowrite}
-Retrowrite is a binary rewritter developped by HexHive. It uses the
+%link to paper
+Retrowrite~\cite{dinesh20oakland} is a binary rewritter developped by HexHive. It uses the
 symbolization technique by generating re-assembleable assembly. Their approach
 is sound by construction because they use relocations, PC-relative addressing,
 and recovered control flow to determine reference constants and symbolize them.
@@ -165,30 +182,76 @@ It uses \textit{Capstone} as a disassembler and \textit{pyelftools} as a binary 
 
 
 %%%%%%%%%%%%%%%%
-\chapter{Challenges=Goal}
+\chapter{Goal}
 %%%%%%%%%%%%%%%%
-Speaking about state of the art rewritter, and mostly
-speak about retrowrite
+As stated in their paper~\cite{dinesh20oakland}, \textit{Retrowrite} was
+firstly designed to support Linux x86-64 PIC binaries that were written in the
+\textit{C Programming Language}.
+The main obstacle for adding support for \textit{C++} is that the symbolization
+for C++ exception handlers is missing. But multiple works were done in order to
+add support for C++ as it can be seen in the \textit{Retrowrite} repository
+~\cite{gitCommit}
 
-I will explain the main issue with C++
-%speak about retrowrite -> c
-%commit for c++
-%my goal: test the programms on a lot of packages
-%        find a common pattern
-%        test specific application
+
+\section{Task}
+The task was to test a large number of packages from the \textit{Debian}~\cite{debian} distribution.
+Debian being a widely used distribution within the Linux community, we thought
+it would be a good idea to use it as a source. We first tested the most used
+programs and then we have another list containing a list of programs without a
+particular orders. From the results obtained, we try to see if Retrowrite can
+indeed rewrite programs written in C++ and we also try to see where it has
+trouble. Then we chose some programs where we try to rewrite the binaries with retrowrite
+and we try to see where exactly the program crashes.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Implementation}
 %%%%%%%%%%%%%%%%%%%%%%%%
+All the scripts used can be found in the github 
+\href{https://github.com/ha2san/debian_docker/tree/main/scripts}{repository}~\cite{repo}.
 
-%give github link
-%explain each scripts
-%explain how I get the list of packages
-%how I filter them
-%Why I used docker
-%Explain how I filter the result
+The main script is \textit{clone.sh}.It will start several containers which will
+each take care of one package. This script also takes care of running the
+command that will prepare the results.
 
-%explain how I choose the three prorgams
+\section{Docker}
+The first decision was to test \textit{Retrowrite} in
+\textit{docker}~\cite{merkel2014docker} containers. This allows us to emulate debian on
+any machine. Each container will execute \textit{entrypoint.sh} on a specific package. The
+binaries available from the command \textit{apt install}~\cite{apt} are stripped, so
+we had to download the source code and compile the program ourselves. Then the
+main task was to run the program with the argument "\textit{--help}" and
+compare the exit code with the recompiled program from the assembly file
+re-assambled by retrowrite. The programs are then sorted according to their
+output code.
+
+\section{Linking}
+One problem encountered was recompiling the
+assembly files by linking them to the correct shared-libraries. To do so, a 
+script was written called flib.sh which takes as argument the original binary
+file. It will then return, using the command "ldd"\cite{ldd} the list of
+libraries to link. 
+
+\section{List of packages}
+
+Having obtained a list of packages from the Debian distribution
+\cite{sourcePackage}, we needed a way of filtering to only obtain
+a list of packages written in \textit{C++}. To do this, we use the script
+\textit{filter\_c++\_packages.sh}. It will simply look in the information given
+in \textit{apt show}~\cite{apt} if the package was written in \textit{C++} or
+not. 
+
+\section{Filtering the result}
+When the docker containers have finished executing their commands, the
+\textit{result\_count.sh} script will be executed. This script takes care of searching
+and sorting the results by arranging them and putting them in a new folder.
+%explain the categories when it is more clear
+
+\section{Three programs}
+We have chosen three programs that we will test manually and try to find out
+where the errors may come from. The three programs are
+flameshot~\cite{flameshot}, bitcoind~\cite{bitcoind} and
+fish-shell~\cite{fish}.
 
 
 %%%%%%%%%%%%%%%%%%%
