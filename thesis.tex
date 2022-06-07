@@ -358,6 +358,15 @@ When the docker containers have finished executing their commands, the
 and sorting the results by arranging them and putting them in a new folder.
 %explain the categories when it is more clear
 
+\section{Use of exceptions}
+We also needed a way to find which binaries were using exception. We noticed
+that all binary files using exceptions also had a call instruction to
+\verb|__cxa_begin_catch@plt| function or
+\verb|__cxa_allocate_exception@plt|, both in the plt section.
+So we just looked in the \textit{.rela.plt} section and search for the
+\verb|__cxa_allocate_exception| symbol. The script is named \textit{elfexceptions.py}
+
+
 \section{Three programs}
 We have chosen three programs that we will test manually and try to find out
 where the errors may come from. They were selected from the top starred project
