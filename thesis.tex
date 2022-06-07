@@ -65,14 +65,18 @@
 %\makeacks
 
 \begin{abstract}
-    The \sysname tool enables lateral decomposition of a multi-dimensional
-    flux compensator along the timing and space axes.
+The \sysname project in a static binary rewriter that allows to audit programs where the
+source code is not available.
+\textit{C++} being a largelly used programming language, we must ensure that
+progams written in this language are safe. 
 
-    The abstract serves as an executive summary of your project.
-    Your abstract should cover at least the following topics, 1-2 sentences for
-    each: what area you are in, the problem you focus on, why existing work is
-    insufficient, what the high-level intuition of your work is, maybe a neat
-    design or implementation decision, and key results of your evaluation.
+Our task is to test \sysname on various \textit{Debian} packages to see if the
+binary could be modified for instrumetation.
+
+From our results, we can see that \sysname worked on a lot of packages but in
+too many cases, the assembly obtained could not be compiled back to a
+functionning executable. Also, only a few programs encountered runtime errors.
+We concluded that there is still works to do to have a fully \textit{C++} support.
 
 \end{abstract}
 
@@ -463,7 +467,7 @@ exceptions. The result can be seen in figure ~\ref{fig:exception} and
 ~\ref{table:exception}.
 
 As you can see, most of the segmentation fault were encountered with programs
-using exception. The difference is not that big but we see that the compilation
+using exception. The difference is not that big, but we see that the compilation
 was more successful when the program was using exceptions. We understant from
 the test done that the program crahses only if he gets in a catch clause.
 
@@ -530,7 +534,7 @@ the test done that the program crahses only if he gets in a catch clause.
 \chapter{Conclusion}
 %%%%%%%%%%%%%%%%%%%%
 
-In general, \sysname worked on a lot of packages and we encountered few runtime
+In general, \sysname worked on a lot of packages, and we encountered few runtime
 errors. The main problem was that it was not possible to compile the
 re-assembled assembly back on most of the packages. The results also showed
 that \sysname can not hanlde exceptions yet. And we had to find the
