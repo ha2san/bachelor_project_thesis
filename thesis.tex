@@ -14,7 +14,35 @@
 % Options: MScThesis, BScThesis, MScProject, BScProject
 \usepackage[BScThesis,lablogo]{EPFLreport}
 \usepackage{xspace}
+\usepackage{listings}
 \usepackage{xcolor}
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 \title{Retrofitting defences to C++ code}
 \author{Hassan Habib}
@@ -219,7 +247,7 @@ fixed refernec earlier.}
 
 Another technique is named \textit{Direct}. This is one of the oldest
 technique. Here the code is simply overwritten. We have to make sure to reajust
-every branches and references\nb{and is hard? why?}.
+every branch and references\nb{and is hard? why?}.
 
 
 The technique used by \sysname is called \textit{Symbolization}. It
@@ -345,10 +373,18 @@ All the scripts used can be found in the GitHub
 \chapter{Evaluation}
 %%%%%%%%%%%%%%%%%%%
 In figure ~\ref{fig:popular}, you can see the result of our scripts on the most
-popular pacakges in \textit{Debian}. You can read the exact numbers in table
-~\ref{table:popular}. The \textit{discard} line corresponds to the packages
-where the program was not testable. Running them with \textit{--help} leads
-to a crash or an error. 
+popular pacakges in \textit{Debian}. The figure ~\ref{fig:remaining}
+corresponds to the remaining packages found in other list. You can read the
+exact numbers in table ~\ref{table:popular} and ~\ref{table:remaining}. The
+\textit{discard} line corresponds to the packages where the program was not
+testable. Running them with \textit{--help} leads to a crash or an error. 
+The category "\textit{unsuccessful compilation}" means that we were not able to
+compile the re-assembled assembly back to an executable for various reason as
+missing shared-libraries or the assembly file contains some error. It was not
+possible to categorize these errors as \textit{clang} always outputs the same
+error in each situation: "\textit{<unknown>:0: error: Undefined temporary symbol .L26312
+}". The "\textit{runtime error}" category corresponds to when we succeed to run
+the modified executable but a segmentation fault was encountered.
 
 
 \begin{figure}[h]
@@ -356,6 +392,13 @@ to a crash or an error.
     \includegraphics[width=15cm]{popular_packages.png} 
     \caption{\sysname on popular packages}
     \label{fig:popular}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=15cm]{remaining_packages.png} 
+    \caption{\sysname on remaining packages}
+    \label{fig:remaining}
 \end{figure}
 
 \begin{table}[h]
@@ -367,7 +410,7 @@ to a crash or an error.
         \hline
         discard                  & 302  \\
         no errors                & 243  \\
-        crash during compilation & 349  \\
+        unsuccessful compilation & 349  \\
         runtime error            & 16   \\
         total                    & 910  \\ 
         \hline
@@ -375,14 +418,6 @@ to a crash or an error.
     \caption{Popular packages}
 \end{table}
 
-\newpage
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=15cm]{remaining_packages.png} 
-    \caption{\sysname on remaining packages}
-    \label{fig:remaining}
-\end{figure}
 
 \begin{table}[h]
     \centering
@@ -393,13 +428,35 @@ to a crash or an error.
         \hline
         discard                  & 109  \\
         no crash                 & 172  \\
-        crash during compilation & 306  \\
+        unsuccessful compilation & 306  \\
         runtime error            & 2    \\
         total                    & 589  \\
         \hline
     \end{tabular}
     \caption{Remaining packages}
 \end{table}
+
+As you can see in thes figures, the most dominant category is the
+"\textit{unsuccessful compilation}" one. Only a few programs crashed during the
+runtime. This is a nice result as \sysname claims that the code produce is
+sound.
+
+By reading the \sysname paper~\cite{dinesh20oakland}, we understand that
+the biggest issue with adding \textit{C++} support was to handle symbolization
+of exception handlers. It seems that is not yet fully supported as testing a
+simple program using exception leads to a runtim error:
+
+\lstinputlisting[language=C++]{exception.cpp}
+
+Retrowrite succeeded to rewrite the executable but running it leads to a segmentation fault.
+We wanted to see for all the packages, which one fails and was using
+exceptions. The result can be seen in figure ~\ref{fig:exception} and
+~\ref{table:exception}.
+
+As you can see, most of the segmentation fault were encountered with programs
+using exception. The difference is not that big but we see that the compilation
+was more successful when the program was using exceptions. We understant from
+the test done that the program crahses only if he gets in a catch clause.
 
 \newpage
 
@@ -422,6 +479,7 @@ to a crash or an error.
         \hline
     \end{tabular}
     \caption{Packages using exception}
+    \label{table:exception}
 \end{table}
 
 \newpage
@@ -466,6 +524,7 @@ to a crash or an error.
 In the conclusion you repeat the main result and finalize the discussion of
 your project. Mention the core results and why as well as how your system
 advances the status quo.
+%Retrowrite must help to compile back the file
 
 \cleardoublepage
 \phantomsection
