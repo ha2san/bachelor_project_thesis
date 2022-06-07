@@ -65,7 +65,7 @@
 %\makeacks
 
 \begin{abstract}
-The \sysname project in a static binary rewriter that allows to audit programs where the
+The \sysname project is a static binary rewriter that allows to audit programs where the
 source code is not available.
 \textit{C++} being a largelly used programming language, we must ensure that
 progams written in this language are safe. 
@@ -80,10 +80,6 @@ We concluded that there is still works to do to have a fully \textit{C++} suppor
 
 \end{abstract}
 
-%\begin{frenchabstract}
-%For a doctoral thesis, you have to provide a French translation of the
-%English abstract. For other projects this is optional.
-%\end{frenchabstract}
 
 \maketoc
 
@@ -153,11 +149,6 @@ allows us to see the different section's information.
 
 
 
-%Sometimes\nb{Why? Here you need to build up the argumentation for retrowrite}, we do not have access to the source code but we want\nb{need} to modify the
-%program for multiple reasons that will be listed later \nb{in Section X (use
-%\\autoref package and a label)}\nb{Inverse sentence, first list reason and then
-%what is the consequence.}. In this case we can use a technique known as \textit{binary rewritting}.
-%
 \subsection{Usage}
 The binary executable given by the compiler can now be used to run the program.
 Having the program in this new file does not remove the utility of the source code.
@@ -174,45 +165,35 @@ Tools such as binary rewriters can be used in order to face this issue.
 
 \section{Binary rewritting}
 %%Pourquoi c'est important ???
-Binary rewritting consists of modifying an executable in the absence of
-while maintaining functionnality.
-It can be used for multiple reasons as for example for program optimization,
-program obfuscation or as in the case of \sysname for security policy
-enforcement via instrumentation. 
+Binary rewritting consists of modifying an executable in the absence of while
+maintaining functionnality. It can be used for multiple reasons as for example
+for program optimization, program obfuscation or as in the case of \sysname for
+security policy enforcement via instrumentation. 
 
-%%\nb{This secitons is a bit out of scope here. Either introduce it earlier but
-%%don't speak about fuzzing here. Extend a bit why we might need to retrofit
-%%security mechanisms.}A way to test a software is by using a technique named
-%%\textit{fuzzing}. In
-%%order to catch bugs, one might want to compile the program with an address
-%%sanitizer \nb{ASAN stands for AddressSanitizer}as \textit{ASan}~\cite{ASan} as they are often based on compiler instrumentation.
-%%In the case where the source code is no longer available, the use of a binary
-%%rewritter as for example \textit{Retrowrite}~\cite{dinesh20oakland} might be useful.
-%show example of obfuscation
 
-Binary rewriters can be divided into two
-main approaches: dynamic instrumetation
-and static instrumentation.
+Binary rewriters can be divided into two main approaches: dynamic
+instrumetation and static instrumentation.
 
 \subsection{Dynamic instrumentation}
 %%executer virtuellement le programe
 In this scheme, the rewritting is done while the program is executed. Usually
-the binary is executed side by side with the rewriter engine. In order
-to analyze and interact with the program during the execution. The rewriter
-might use the OS's primitves as the PTRACE API in Linux for example.  
-An advantage of dynamic instrumentation is that analyzing the whole binary might
-be avoided.  This is practical for large binaries. However, the disadvantage of
-using this technique is the high performance cost. Translating the program at
-runtime does not come with no cost and the overhead is way higher than running
-a modified binary executable~\cite{dinesh20oakland}.
+the binary is executed side by side with the rewriter engine. In order to
+analyze and interact with the program during the execution. The rewriter might
+use the OS's primitves as the PTRACE API in Linux for example.  An advantage of
+dynamic instrumentation is that analyzing the whole binary might be avoided.
+This is practical for large binaries. However, the disadvantage of using this
+technique is the high performance cost. Translating the program at runtime does
+not come with no cost and the overhead is way higher than running a modified
+binary executable~\cite{dinesh20oakland}.
 
 
 \subsection{Static instrumentation}
-Contrary to dynamic instrumentation, static rewriters operates on binaries stored in
-persistent \nb{at static time } memory. It outputs a new binary executable that
-corresponds to the initial executable but rewritten. This generated executable have the
-advantage of being almost as fast as the original executable that would have
-been compiled for instrumentation as the overhead introduced are usually low.
+Contrary to dynamic instrumentation, static rewriters operates on binaries
+stored in persistent \nb{at static time } memory. It outputs a new binary
+executable that corresponds to the initial executable but rewritten. This
+generated executable have the advantage of being almost as fast as the original
+executable that would have been compiled for instrumentation as the overhead
+introduced are usually low.
 
 
 \subsection{Steps in binary rewritting}
@@ -264,10 +245,10 @@ overhead in each section!}
 
 \section{Retrowrite}
 %link to paper
-Retrowrite~\cite{dinesh20oakland} is a binary rewriter developped by HexHive. It uses the
-symbolization technique by generating re-assembleable assembly. Retrowrite has as objectif to be sound. \nb{why it is sound ?}
-It uses \textit{Capstone} as a disassembler and \textit{pyelftools} as a binary
-parser.
+Retrowrite~\cite{dinesh20oakland} is a binary rewriter developped by HexHive.
+It uses the symbolization technique by generating re-assembleable assembly.
+Retrowrite has as objectif to be sound. \nb{why it is sound ?} It uses
+\textit{Capstone} as a disassembler and \textit{pyelftools} as a binary parser.
 
 \section{Other security techniques}
 \textit{C/C++} are one of the most used programming languages. They are
@@ -288,10 +269,10 @@ remedy to this issue by transforming static checks to runtime checks.
 %%%%%%%%%%%%%%%%
 As stated in their paper~\cite{dinesh20oakland}, \textit{Retrowrite} was
 firstly designed to support Linux x86-64 PIC binaries that were written in the
-\textit{C Programming Language}.
-The main obstacle for adding support for \textit{C++} is that \nb{remove word}the symbolization
-of C++ exception handlers is not yet supported. Multiple works were done in order to
-add support for C++ as it can be seen in the \textit{Retrowrite} repository
+\textit{C Programming Language}. The main obstacle for adding support for
+\textit{C++} is that \nb{remove word}the symbolization of C++ exception
+handlers is not yet supported. Multiple works were done in order to add support
+for C++ as it can be seen in the \textit{Retrowrite} repository
 ~\cite{gitCommit}.
 
 \nb{Discuss what was the status when you started the
@@ -516,10 +497,6 @@ the test done that the program crahses only if he gets in a catch clause.
     \end{tabular}
     \caption{Packages not using exceptions}
 \end{table}
-%show table or graph about popular packages
-%show table or graph about all tested packages
-%show errors with three tested program
-%interpret result
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -541,13 +518,6 @@ that \sysname can not hanlde exceptions yet. And we had to find the
 shared-libraries ourselves. It would be an enhancement if retrowrite could to
 it for x86 CPU as it seems that this option is only available for \textit{ARM}
 cpu~\cite{retroArm}.
-
-
-
-%In the conclusion you repeat the main result and finalize the discussion of
-%your project. Mention the core results and why as well as how your system
-%advances the status quo.
-%Retrowrite must help to compile back the file
 
 \cleardoublepage
 \phantomsection
