@@ -299,14 +299,14 @@ command that will prepare the results.
 \section{Docker}
 The first decision was to test \textit{Retrowrite} in
 \textit{docker}~\cite{merkel2014docker} containers. This allows us to emulate
-\textit{Debian} on any machine. Each container will execute \textit{entrypoint.sh} on a specific
-package. The
-binaries available from the command \textit{apt install}~\cite{apt} are stripped, so
-we had to download the source code and compile the program ourselves. Then the
-\nb{main task is just extra words without any benefits}main task was to run the
-program with the argument "\textit{--help}" and compare the exit code with the
-recompiled program from the assembly file re-assambled by retrowrite. The
-programs are then sorted according to their output code.
+\textit{Debian} on any machine. Each container will execute
+\textit{entrypoint.sh} on a specific package. The binaries available from the
+command \textit{apt install}~\cite{apt} are stripped, so we had to download the
+source code and compile the program ourselves. Then we ran the program with the
+argument "\textit{--help}" and compared the exit code with the recompiled
+program from the assembly file re-assambled by retrowrite. The programs are
+then sorted according to their output code.
+
 
 \section{Linking}
 One problem encountered was recompiling the
@@ -344,6 +344,12 @@ All the scripts used can be found in the GitHub
 %%%%%%%%%%%%%%%%%%%
 \chapter{Evaluation}
 %%%%%%%%%%%%%%%%%%%
+In figure ~\ref{fig:popular}, you can see the result of our scripts on the most
+popular pacakges in \textit{Debian}. You can read the exact numbers in table
+~\ref{table:popular}. The \textit{discard} line corresponds to the packages
+where the program was not testable. Running them with \textit{--help} leads
+to a crash or an error. 
+
 
 \begin{figure}[h]
     \centering
@@ -357,7 +363,7 @@ All the scripts used can be found in the GitHub
     \label{table:popular}
     \begin{tabular}{ll}
         \hline
-        categorie                & \#packages \\
+        category                & \#packages \\
         \hline
         discard                  & 302  \\
         no errors                & 243  \\
@@ -383,7 +389,7 @@ All the scripts used can be found in the GitHub
     \label{table:remaining}
     \begin{tabular}{ll}
         \hline
-        categorie                & \#packages \\
+        category                & \#packages \\
         \hline
         discard                  & 109  \\
         no crash                 & 172  \\
@@ -408,7 +414,7 @@ All the scripts used can be found in the GitHub
     \centering
     \begin{tabular}{ll} 
         \hline
-        Categorie                & \#packages  \\ 
+        category                & \#packages  \\ 
         \hline
         crash during compilation & 199         \\
         no crash                 & 92          \\
@@ -430,7 +436,7 @@ All the scripts used can be found in the GitHub
     \centering
     \begin{tabular}{ll} 
         \hline
-        categorie                & \#packages  \\ 
+        category                & \#packages  \\ 
         \hline
         crash during compilation & 427         \\
         no crash                 & 318         \\
