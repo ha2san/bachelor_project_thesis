@@ -373,18 +373,17 @@ All the scripts used can be found in the GitHub
 \chapter{Evaluation}
 %%%%%%%%%%%%%%%%%%%
 \nb{better use autoref}
-In figure ~\ref{fig:popular}, you can see the result of our scripts on the most
-popular pacakges in \textit{Debian}. The figure ~\ref{fig:remaining}
+In ~\autoref{fig:popular}, you can see the result of our scripts on the most
+popular pacakges in \textit{Debian}. The \autoref{fig:remaining}
 corresponds to the remaining packages found in other list. You can read the
-exact numbers in table ~\ref{table:popular} and ~\ref{table:remaining}\nb{ref
-not working}. The
+exact numbers in \autoref{table:popular} and ~\autoref{table:remaining}\nb{ref not working}. The
 \textit{discard} line corresponds to the packages where the program was not
 testable. Running them with \textit{--help} leads to a crash or an error. 
 The category "\textit{unsuccessful compilation}" means that we were not able to
 compile the re-assembled assembly back to an executable for various reason as
 missing shared-libraries or the assembly file contains some error. It was not
 possible to categorize these errors as \textit{clang} always outputs the same
-error in each situation: "\textit{<unknown>:0: error: Undefined temporary symbol .L26312
+error in each situation: "\texttt{<unknown>:0: error: Undefined temporary symbol .L26312
 }". The "\textit{runtime error}" category corresponds to when we succeed to run
 the modified executable but a segmentation fault was encountered.
 
@@ -414,6 +413,7 @@ the modified executable but a segmentation fault was encountered.
         no errors                & 243  \\
         unsuccessful compilation & 349  \\
         runtime error            & 16   \\
+        \hline
         total                    & 910  \\ 
         \hline
     \end{tabular}
@@ -432,6 +432,7 @@ the modified executable but a segmentation fault was encountered.
         no crash                 & 172  \\
         unsuccessful compilation & 306  \\
         runtime error            & 2    \\
+        \hline
         total                    & 589  \\
         \hline
     \end{tabular}
