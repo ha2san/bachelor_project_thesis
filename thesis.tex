@@ -336,11 +336,17 @@ type safety.
 
 \subsection{HexType}
 \textit{HexType} is a tool written by the \textit{HexHive} lab in order to
-detect type confusion in software written in \textit{C++}. Typecast are
-normally checked statically. This can lead to type confusion as no one prevents
-the program to cast an object of incompatible base type. \textit{HexType}
-remedy to this issue by transforming static checks to runtime checks.
-\nb{speak more about hextype}
+detect type confusion in software written in \textit{C++}. Typecast are when a
+pointer of a certain type is converted into antoher. Typecast are
+normally checked statically. The vulnerability lies in the fact that
+down-casting is allowed. Down-casting means transforming a pointer representing
+a class into one of its descendants as seen in the code example. This can lead
+to type confusion as no one prevents the program to cast an object of
+incompatible base type. \textit{HexType} remedy to this issue by transforming
+static checks to runtime checks.
+
+\lstinputlisting[language=C++]{type_confusion.cpp}
+
 
 
 %%%%%%%%%%%%%%%%
@@ -430,7 +436,6 @@ in the \textit{.rela.plt} section and search for the
 \verb|__cxa_allocate_exception| symbol. The script is named
 \textit{elfexceptions.py}
 
-\nb{expliquer les termes}
 
 %\section{Three programs}
 %We have chosen three programs that we will test manually and try to find out
