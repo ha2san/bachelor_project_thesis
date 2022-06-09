@@ -79,7 +79,9 @@
     $60.2 \%$ cases, the assembly obtained could not be compiled back to a
     functionning executable. Unforthunately, we were unable to gain more
     information about the compilation errors. Also, only a few programs encountered
-    runtime errors.
+    runtime errors. We have also found that file size plays a role in the
+    success of \sysname. Large files (>1.00 MB) seem not to be able to be
+    transformed without encountering an error.
     We concluded that there is still works to do to have a fully \textit{C++} support.
 
 \end{abstract}
@@ -129,9 +131,11 @@ robust tool.
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Background}
 %%%%%%%%%%%%%%%%%%%%
-In this section, we will give a some backround  in order to understand
-the experience \nb{the experience is a bit vague. Be clearer in that you want to
-build up knowledge for later.}
+We will explain several aspects in order to allow the reader to be familiar
+with any binary rewriter and more precisely \sysname. Our experience is not
+exactly based on implementing or improving this tool, we still provide information
+so that the reader can see the big picture regarding software that modify binary
+executable.
 
 \section{Compiler}
 Computer programs can be executed in two different ways: they can be interpreted
@@ -151,7 +155,7 @@ Note that it will not execute the source code but only generate an executable
 file.
 
 
-Even if the a compiled program run faster than an interpreted one, one might
+Even if the compiled program run faster than an interpreted one, one might
 prefer to write program in an interpreted language because it is platform
 independant in most of the cases. And to start executing the program takes less
 time if the source files were modified.
@@ -287,22 +291,16 @@ Both dynamic and static instrumentation follow four main steps:
         generated.
         There are multiple techniques for this part. 
 \end{enumerate}
-%\begin{figure}[h]
-%    \includegraphics[width=\linewidth]{required_steps.png} 
-%    \caption{Required steps for binary rewritting\nb{Make two figures. Add
-%            refernce to the figure in the text. The figure shold help understand
-%    something and not just be there for beauty}}
-%    \label{fig:steps}
-%\end{figure}
+
+
+
 \subsection{Transformation and Code genreation techniques}
 There are multiples techniques for the transformation and code generation
 parts. The simplest technique is called \textit{Trampoline}. All new code are
 added in new sections in the binary. Branches are then added to redirect to the
-right location after an instrumentation point. In this technique, no reference
-or branches are broken, but this technique introduce too much overhead as we
-need to jump from and to the trampoline at each instrumentation. \nb{Why do we
-    need to do that. Eplain the challenge of
-fixed refernec earlier.}
+right location after an instrumentation point. This technique introduce too much overhead as we
+need to jump from and to the trampoline at each instrumentation. 
+
 
 Another technique is named \textit{Direct}. This is one of the oldest
 technique. Here the code is simply overwritten. We have to make sure to reajust
@@ -329,7 +327,7 @@ constants and symolize them. It uses
 \section{Other security techniques}
 \textit{C/C++} are two one of the most used programming languages. They are
 mainly used for their runtime performance and low level memory access
-capabilities, but this comes with a cost. In these languages , memory and type
+capabilities, but this comes with a cost. In these languages, memory and type
 safety are managed by the programmers. Tools can be used to enforce the safety
 of software. For example, one might want to use \textit{HexType} to enforce
 type safety.
@@ -359,14 +357,25 @@ firstly designed to support Linux x86-64 PIC binaries that were written in the
 handlers is not yet supported. Multiple works were done in order to add support
 for C++ as it can be seen in the \textit{Retrowrite} repository~\cite{gitCommit}.
 
-\nb{Discuss what was the status when you started the
-project. Why is it interesting etc...}
-
-
-\nb{We are missing a page about challenges. This should be much longer.}
 
 \section{Challenges}
-At the beginning of the academic year, \sysname did not support C++ yet. 
+Because when Retrowrite was presented to the public, C++ was not yet supported.
+But C++ being a more versatile language than C, it seemed obvious that the
+support of the latter was essential to make Retrowrite a complete tool. Our
+first intention was to integrate hextype into retrowrite. But then it turned
+out that the task was more difficult than expected. Since not having the source
+code, it was complicated to obtain the information on the classes. It would be
+possible to do something if debugging information was available, but this is
+not the case for many executables. Similarly, pyelftools cannot analyze
+executables with a version of gdwarf < 4.0, whereas the standard is version 5
+today.
+
+Then, \textit{Hexhive} released a version of retrowrite on their repository
+where C++ support was added. So we decided to focus on testing this new
+feature.
+We focused on testing \sysname on as many packages as possible but didn't
+really pay attention to whether the modified file behaved like the original
+file.
 
 \section{Task}
 The task was to test many packages from the
@@ -378,11 +387,6 @@ The test were not extensive as we were only testing if the command
 was able to compile the assembly file generated by \sysname.
 Then we chose some programs where we try to run \sysname on them, and we try to
 see where exactly the program crashes.
-
-\nb{This whole paragraph
-    should be part of the above one where you gently explain why we need more
-    testing and why we wanted to test on this code (diversity of C++ coding patterns
-for example). and why not Chromium (too big, not handled by Rretrowrite)}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -451,7 +455,6 @@ All the scripts used can be found in the GitHub
 %%%%%%%%%%%%%%%%%%%
 \chapter{Evaluation}
 %%%%%%%%%%%%%%%%%%%
-\nb{speaks about issue raised on github}
 
 In \autoref{table:popular}, you can see the result of our scripts on the most
 popular pacakges in \textit{Debian}. The \autoref{table:remaining}
@@ -555,13 +558,55 @@ the test done that the program crahses only if he gets in a catch clause.
     \caption{Packages not using exceptions}
 \end{table}
 
+Another observation that can be made is that the size of the executable
+matters. As you can see in \autoref{fig:sizes}, the number of executables that
+could be compiled and run drops drastically to 0 as the file size increases. In
+the other direction, the number of errors at the compilation level rises in
+parallel to the size of the file. Similarly, the number of runtime errors also
+increases with file size, but we believe this is more related to exception
+usage.
 
-%%%%%%%%%%%%%%%%%%%%%%%
-%\chapter{Related Work}
-%%%%%%%%%%%%%%%%%%%%%%%
-%
-%I can cite other rewritter.
+\begin{figure}[H]
+    \includegraphics[width=\linewidth]{chart.png} 
+    \caption{classification of packages according to their size}
+    \label{fig:sizes}
+\end{figure}
 
+\begin{table}[H]
+    \begin{tabular}{llll}
+        \hline
+        sizes               & \multicolumn{1}{l}{no error} & \multicolumn{1}{l}{runtime crash} & \multicolumn{1}{l}{compilation crash} \\
+        \hline
+        10.21 KB-14.34 KB   & 33                           & 0                                 & 20                                    \\
+        14.34 KB-18.62 KB   & 29                           & 0                                 & 24                                    \\
+        18.64 KB-22.52 KB   & 20                           & 0                                 & 33                                    \\
+        22.52 KB-26.26 KB   & 26                           & 0                                 & 26                                    \\
+        26.30 KB-30.31 KB   & 26                           & 0                                 & 27                                    \\
+        30.31 KB-34.32 KB   & 19                           & 0                                 & 34                                    \\
+        34.32 KB-42.16 KB   & 19                           & 1                                 & 32                                    \\
+        42.20 KB-46.81 KB   & 19                           & 0                                 & 34                                    \\
+        46.91 KB-58.31 KB   & 32                           & 0                                 & 21                                    \\
+        58.31 KB-70.49 KB   & 25                           & 0                                 & 27                                    \\
+        70.76 KB-86.68 KB   & 23                           & 0                                 & 30                                    \\
+        86.76 KB-106.30 KB  & 22                           & 0                                 & 31                                    \\
+        106.30 KB-137.53 KB & 29                           & 0                                 & 24                                    \\
+        138.03 KB-178.39 KB & 19                           & 0                                 & 33                                    \\
+        179.11 KB-218.44 KB & 18                           & 1                                 & 34                                    \\
+        218.44 KB-317.96 KB & 14                           & 6                                 & 33                                    \\
+        319.84 KB-554.07 KB & 13                           & 2                                 & 37                                    \\
+        556.21 KB-848.16 KB & 17                           & 5                                 & 31                                    \\
+        848.16 KB-2.04 MB   & 7                            & 2                                 & 44                                    \\
+        2.08 MB-47.55 MB    & 0                            & 1                                 & 51    \\                               
+        \hline
+    \end{tabular}
+\end{table}
+
+During our tests, we were able to discover some problems and reported them to
+the developers. The first being that some assembly files can only be
+transformed into executable format using clang and not gcc. Another issue was
+that the compiler seemed to not recognize certain sections in the assembly
+file. A solution was then offered in the comments when the issue was written
+where a user simply proposed to remove all references to these sections.
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -571,9 +616,10 @@ the test done that the program crahses only if he gets in a catch clause.
 In general, \sysname worked on a lot of packages, and we encountered few runtime
 errors. The main problem was that it was not possible to compile the
 re-assembled assembly back on most of the packages. The results also showed
-that \sysname can not hanlde exceptions yet. And we had to find the
-shared-libraries ourselves. It would be an enhancement if retrowrite could to
-it for x86 CPU as it seems that this option is only available for \textit{ARM}
+that \sysname can not hanlde exceptions yet. Similarly, \sysname seems to
+encounter errors with large file sizes. We also had to find the shared-libraries
+ourselves. It would be an enhancement if retrowrite could do it for x86 CPU as
+it seems that this option is only available for \textit{ARM}
 cpu~\cite{retroArm}.
 
 \cleardoublepage
