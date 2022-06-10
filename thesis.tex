@@ -66,31 +66,27 @@
 %\makeacks
 
 \begin{abstract}
-    The \sysname project is a static binary rewriter that allows to add
+    The \sysname project is a static binary rewriter that allows adding
     instrumentation into programs where the source code is not available.
 
+    \textit{C++} being a largely used programming language, we must ensure that programs
+    written in this language are safe. By "safe" we mean the application should
+    behave normally when under malicious attack and other risks.
 
-    \textit{C++} being a largely used programming language, we must ensure that
-    programs written in this language are safe. By "safe" we mean the
-    application should behave normally when under malicious attack and other
-    risks.
-     
-    Our task is to test \sysname on
-    various \textit{Debian} packages written in \textit{C++} to see if the binary
-    could be modified for instrumentation.
+    Our task is to test Retrowrite on various \textit{Debian} packages written in \textit{C++} to
+    see if the binary could be modified for instrumentation.
 
-    From our results, we can see that \sysname worked on $38.1\%$ of packages but in
-    $60.2 \%$ cases, the assembly obtained could not be compiled back to a
-    functionning executable. Unforthunately, we were unable to gain more
+    From our results, we can see that \sysname worked on 38.1\% of packages,
+    but in 60.2\% of cases, the assembly obtained could not be compiled back to
+    a functioning executable. Unfortunately, we were unable to gain more
     information about the compilation errors because the compiler displayed the
     same error message each time. A more in-depth study of the assembly file
-    would have been necessary in order to find the cause. Also, only a few
-    programs encountered runtime errors. We have also found that file size
-    plays a role in the success of \sysname. Large files seem not to be able to
-    be transformed without encountering an error. One clue to the cause could
-    be that large files use more shared libraries. We concluded that there is
-    still possible improvements to make in order to have a fully \textit{C++}
-    support.
+    would have been necessary to find the cause. Also, only a few programs
+    encountered runtime errors. We have also found that file size plays a role
+    in the success of \sysname. Large files seem not to be able to be
+    transformed without encountering an error. One clue to the cause could be
+    that large files use more shared libraries. We concluded that there are
+    still possible improvements to make to have fully \textit{C++} support.
 
 \end{abstract}
 
@@ -114,15 +110,16 @@
 %This section is usually 3-5 pages.
 Using only free software or even software whose source code is available is
 not that easy. For example, people are used to using a program suite like
-\textit{Microsoft office} and don't have time to change their habit by adopting
-the use of an equivalent open source application.  This can be a security
+\textit{Microsoft office} and don't have time to change their habits by adopting
+the use of an equivalent open-source application.  This can be a security
 problem as it is difficult for the community to discover new bugs. Indeed,
 techniques such as fuzzing or memory sanitization can only be applied by
 applying instrumentation at compilation time. Fortunately, a technique named
 \textit{binary rewritting} makes it possible to insert instrumentation without
 having access to the source code.
 
-Binary rewriting is  used to insert instrumentation into
+
+Binary rewriting is used to insert instrumentation into
 binary executables where the source code is not accessible. These tools allow
 the insertion of instrumentation by analyzing the executable file. They can be
 categorized into two approaches: static and dynamic. The first category
@@ -130,8 +127,8 @@ generates an executable whose instrumentation could be added while the second
 adds these instrumentations during the execution of the program. The first
 approach has the advantage of having less impact on execution time. 
 
-Retrowrite is one most recent and successful tools. It has the advantage of
-producing executables which are sound and whose overhead is almost absent.
+\sysname is one most recent and successful tools. It has the advantage of
+producing executables that are sound and whose overhead is almost absent.
 Similarly, C/C++ are widely used languages because of their speed and the
 freedom they give in memory management. Retrowrite was initially built to
 support binary files written in C. Fortunately, work was then done to support
@@ -142,15 +139,16 @@ We first wanted to integrate the work done in the \textit{Hextype} project into
 \sysname, but we noticed that this work was too ambitious and could not be done in
 such a short time. And since the integration of C++ support has been done in
 the meantime, we decided to focus our work on testing \sysname on a large
-number of packages in order to get an overview of the performance and the
+number of packages to get an overview of the performance and the
 reliability of \sysname. To obtain a variety of programs to test, we chose to
 take the packages used in the \textit{Debian} distribution. By this, we can use
-real programs used by users and see how \sysname actually works.
+real programs used by users and see how \sysname works.
+
 
 %%%%%%%%%%%%%%%%%%%%
 \chapter{Background}
 %%%%%%%%%%%%%%%%%%%%
-We will explain several aspects in order to allow the reader to be familiar
+We will explain several aspects to allow the reader to be familiar
 with any binary rewriter and more precisely \sysname. The information given
 here is not exactly to understand our work but rather to be familiar with the
 tools we use and to understand how a binary rewriter works in general.
@@ -174,17 +172,16 @@ Note that it will not execute the source code but only generate an executable
 file.
 
 
-Even if the compiled program run faster than an interpreted one, one might
-prefer to write program in an interpreted language because it is platform
-independent in most of the cases. Furthermore, to start executing the program
-takes less time if the source files were modified.
-
-
+Even if the compiled program runs faster than an interpreted one, one might
+prefer to write programs in an interpreted language because it is
+platform-independent in most cases. Furthermore,  the time it takes for the
+application to be available is less if the source code is modified.
 
 \section{Binary executable}
 \texttt{C++} being a compiled language, we will focus on the executable file
-generated by the compiler. We will now discuss the most common format of binary
+generated by the compiler. We will now discuss the most common format of the binary
 executable: the \texttt{ELF} format.
+
 \subsection{ELF format}
 %source man page elf
 %
@@ -194,7 +191,7 @@ ELF\footnote{Executable and Linkable Format} format.
 It is important to know the format of the binary file since we need to know
 where to find important information during the analysis done by a binary
 rewriter. \sysname focuses on ELF format files and uses \textit{pyelftools}, a
-widely avalaible ELF parser.
+widely available ELF parser.
 
 
 An executable file respecting the ELF format must follow a certain layout. At
@@ -250,29 +247,29 @@ These are all the predefined sections by the assembler.
 \subsection{Usage}
 The binary executable produced by the compiler can now be used to run the program.
 Having the program in this new file does not remove the utility of the source code.
-Indeed, a compiler can be executed with multiple flags in order to have a more 
+Indeed, a compiler can be executed with multiple flags to have a more 
 specific executable. For example, a program might need to be tested before its
 release. To do so, memory errors can be discovered using a feedback-guided fuzzer
 combined with sanitization.
 
 
 To check the memory, \textit{Address Sanitizer} (ASan)~\cite{ASan}
-can be used by compiling the source code with a certain flag that will tell the
+can be used by compiling the source code with flags that will tell the
 compiler to add instrumentation. 
-\textit{ASan} is a memory error detector. It can help find issues like  use
-after free, heap buffer overflow, stack buffer overflow, etc. The typical
+\textit{ASan} is a memory error detector. It can help find issues like use
+after free, heap buffer overflow, or stack buffer overflow. The typical
 slowdown introduced is 2x.
 
 
-In the case of an end user wanting to test a closed source software, it is
+In the case of an end-user wanting to test a closed source software, it is
 nearly impossible to get the program compiled with the instrumentation needed.
-Tools such as binary rewriters can be used in order to face this issue.
+Tools such as binary rewriters can be used to face this issue.
 
 
 \section{Binary rewritting}
-Binary rewritting consists of modifying an executable in the absence of source
-code while maintaining functionnality. It can be used for multiple reasons as
-for example for program optimization, program obfuscation or as in the case of
+Binary rewriting consists of modifying an executable in the absence of source
+code while maintaining functionality. It can be used for multiple reasons 
+for example for program optimization, program obfuscation, or as in the case of
 \sysname for security policy enforcement via instrumentation. 
 
 
@@ -281,41 +278,60 @@ instrumentation and static instrumentation.
 
 \subsection{Dynamic instrumentation}
 %%executer virtuellement le programe
-In this scheme, the rewritting is done while the program is executed. Usually
-the binary is executed side by side with the rewriter engine. In order to
+In this scheme, the rewriting is done while the program is executed. Usually,
+the binary is executed side by side with the rewriter engine. To
 analyze and interact with the program during the execution. The rewriter might
-use the OS's primitves as the PTRACE API in Linux for example.  An advantage of
+use the OS's primitives as the PTRACE API in Linux for example.  An advantage of
 dynamic instrumentation is that analyzing the whole binary might be avoided.
 This is practical for large binaries. However, the disadvantage of using this
-technique is the high performance cost. Translating the program at runtime does
+technique is the high-performance cost. Translating the program at runtime does
 not come with no cost and the overhead is way higher than running a modified
 binary executable~\cite{dinesh20oakland}.
 
 
 \subsection{Static instrumentation}
-Contrary to dynamic instrumentation, static rewriters operates on binaries
+Contrary to dynamic instrumentation, static rewriters operate on binaries
 at static time. It outputs a new binary executable that corresponds to the
-initial executable but rewritten. This generated executable have the advantage
+initial executable but is rewritten. This generated executable has the advantage
 of being almost as fast as the original executable that would have been
 compiled for instrumentation as the overhead introduced are usually low.
 
 
+
 \subsection{Steps in binary rewritting}
-Both dynamic and static instrumentation follow four main steps:
+Both dynamic and static instrumentation follows four main steps:
 \begin{enumerate}
     \item Parsing:
-        This step consist of obtaining the instruction stream from the binary
+        This step consists of obtaining the instruction stream from the binary
         and pass it to a disassembler.
     \item Analysis:
         This part consists of gaining as much information as possible. The
-        objectif is to recover the structure of the source code.
+        objective is to recover the structure of the source code.
     \item Transformation:
         Here, we must find all the locations where instrumentation must be
         added or removed. 
     \item Code generation:
         We have to make sure that adding the instrumentation does not modify the
-        behaviour of the executable. The modified executable must be sound. And
-        then the original executable must be patched or new executable must be
+        behavior of the executable. The modified executable must be sound. And
+        then the original executable must be patched or a new executable must be
+        generated.
+        There are multiple techniques for this part. 
+\end{enumerate}
+Both dynamic and static instrumentation follows four main steps:
+\begin{enumerate}
+    \item Parsing:
+        This step consists of obtaining the instruction stream from the binary
+        and pass it to a disassembler.
+    \item Analysis:
+        This part consists of gaining as much information as possible. The
+        objective is to recover the structure of the source code.
+    \item Transformation:
+        Here, we must find all the locations where instrumentation must be
+        added or removed. 
+    \item Code generation:
+        We have to make sure that adding the instrumentation does not modify the
+        behavior of the executable. The modified executable must be sound. And
+        then the original executable must be patched or a new executable must be
         generated.
         There are multiple techniques for this part. 
 \end{enumerate}
@@ -323,38 +339,38 @@ Both dynamic and static instrumentation follow four main steps:
 
 
 \subsection{Transformation and Code generation techniques}
-There are multiples techniques for the transformation and code generation
-parts. The simplest technique is called \textit{Trampoline}. All new code are
+There are multiple techniques for the transformation and code generation
+parts. The simplest technique is called \textit{Trampoline}. All new codes are
 added in new sections in the binary. Branches are then added to redirect to the
-right location after an instrumentation point. This technique introduce too much overhead as we
+right location after an instrumentation point. This technique introduces too much overhead as we
 need to jump from and to the trampoline at each instrumentation. 
 
 
 Another technique is named \textit{Direct}. This is one of the oldest
-technique. Here the code is simply overwritten. We have to make sure to readjust
-every branch and references.  But this technique does not scale well as adding
+techniques. Here the code is simply overwritten. We have to make sure to readjust
+every branch and reference.  But this technique does not scale well as adding
 and removing instructions implies an update of all branch targets.
 
 
 The technique used by \sysname is called \textit{Symbolization}. It
 consists of transforming the binary into an assembly text file. It transforms
-all references constants into assembly labels. Then, many tools can insert
+all reference constants into assembly labels. Then, many tools can insert
 instrumentation into the reassembled file. Unlike the trampoline technique,
 this method is defined as being \textit{zero-overhead} as the only overhead
 added is the time to execute the instrumentation.
-%add example of symbolization
+
 
 \section{Retrowrite}
 %link to paper
 Retrowrite~\cite{dinesh20oakland} is a binary rewriter developed by HexHive.
-It uses the symbolization technique by generating re-assembleable assembly.
+It uses the symbolization technique by generating re-assemblable assembly.
 Retrowrite has as objective to be sound by the way they determine reference
 constants and symbolize them. It uses
 \textit{Capstone} as a disassembler and \textit{pyelftools} as a binary parser.
 
 \section{Other security techniques}
 \textit{C/C++} are two of the most used programming languages. They are
-mainly used for their runtime performance and low level memory access
+mainly used for their runtime performance and low-level memory access
 capabilities, but this comes with a cost. In these languages, memory and type
 safety are managed by the programmers. Tools can be used to enforce the safety
 of software. For example, one might want to use \textit{HexType} to enforce
@@ -362,14 +378,14 @@ type safety.
 
 \subsection{HexType}
 \textit{HexType} is a tool written by the \textit{HexHive} lab in order to
-detect type confusion in software written in \textit{C++}. Typecast are when a
+detect type confusion in software written in \textit{C++}. Typecast is when a
 pointer of a certain type is converted into another. Typecast are
 normally checked statically. The vulnerability lies in the fact that
 down-casting is allowed. Down-casting means transforming a pointer representing
 a class into one of its descendants as seen in the code example. This can lead
 to type confusion as no one prevents the program to cast an object of
-incompatible base type. \textit{HexType} remedy to this issue by transforming
-static checks to runtime checks.
+an incompatible base type. \textit{HexType} remedy this issue by transforming
+static checks into runtime checks.
 
 \lstinputlisting[language=C++,caption=Example of type confusion]{type_confusion.cpp}
 As you can in the code above, the Dog class derives from the Animal class.
@@ -378,25 +394,26 @@ as a dog. An animal does not have an "id" attribute and therefore accessing it
 can be considered a memory safety violation.
 
 
+
 %%%%%%%%%%%%%%%%
 \chapter{Goal}
 %%%%%%%%%%%%%%%%
 As stated in their paper~\cite{dinesh20oakland}, \textit{Retrowrite} was
 firstly designed to support Linux x86-64 PIC binaries that were written in the
-\textit{C Programming Language}. The main obstacle for adding support for
+\textit{C Programming Language}. The main obstacle to adding support for
 \textit{C++} is that the symbolization of C++ exception
-handlers is not yet supported. Multiple works were done in order to add support
+handlers is not yet supported. Multiple works were done to add support
 for C++ as it can be seen in the \textit{Retrowrite} repository~\cite{gitCommit}.
 
 
 \section{Challenges}
 When Retrowrite was presented to the public, C++ was not yet fully supported. 
-C++ being a more versatile language than C, it seemed obvious that the
+C++ is a more versatile language than C, it seemed obvious that the
 support of the latter was essential to make Retrowrite a complete tool. Our
-first intention was to integrate Hextype into retrowrite. It
+first intention was to integrate Hextype into \sysname. It
 turned out then that the task was more difficult than expected. Since not
 having the source code, it was complicated to obtain the information on the
-classes, as these informations often resides in the debug section. It would be
+classes, as this information often resides in the debug section. It would be
 possible to do something if debugging information was available, but this is
 not the case for many executables.
 Similarly, pyelftools cannot analyze executables with a version of gdwarf <
@@ -404,11 +421,11 @@ Similarly, pyelftools cannot analyze executables with a version of gdwarf <
 gdwarf 4 to test the programs but that wouldn't make sense in the real world
 where the standard is different.
 
-Then, \textit{Hexhive} released a version of retrowrite on their repository
+Then, \textit{Hexhive} released a version of \sysname on their repository
 where C++ support was added. So we decided to focus on testing this new
 feature.
 We focused on testing \sysname on as many packages as possible but didn't
-really pay attention to whether the modified file behaved like the original
+pay attention to whether the modified file behaved like the original
 file.
 
 \section{Task}
@@ -416,16 +433,16 @@ The task was to test many packages from the
 \textit{Debian}~\cite{debian} distribution. Debian being a widely used
 distribution, we thought it would be a good idea to use it as a source. 
 We tested Retrowrite on a bunch of programs that can be found on Debian.
-The test were not extensive as we were only testing if the command
+The tests were not extensive as we were only testing if the command
 \textit{--help} worked. The purpose of the testing was to see if the compiler
 was able to compile the assembly file generated by \sysname.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Implementation}
 %%%%%%%%%%%%%%%%%%%%%%%%
-
-The main script is \textit{clone.sh}. It will start several containers which will
+The main script is \textit{clone.sh}. It will start with several containers which will
 each take care of one package. This script also takes care of running the
 command that will prepare the results.
 
@@ -437,14 +454,14 @@ The first decision was to test \textit{Retrowrite} in
 command \textit{apt install}~\cite{apt} are stripped, so we had to download the
 source code and compile the program ourselves. Then we ran the program with the
 argument "\textit{--help}" and compared the exit code with the recompiled
-program from the assembly file re-assambled by retrowrite. The programs are
+program from the assembly file re-assembled by \sysname. The programs are
 then sorted according to their output code.
 
 
 \section{Linking}
 One problem encountered was recompiling the
-assembly files by linking them to the correct shared-libraries. To do so, a 
-script was written called  \textit{flib.sh} which takes as argument the original binary
+assembly files by linking them to the correct shared libraries. To do so, a 
+script was written called  \textit{flib.sh} which takes as an argument the original binary
 file. It will then return, using the command "ldd"\cite{ldd} the list of
 libraries to link. 
 
@@ -461,10 +478,10 @@ not.
 When the docker containers have finished executing their commands, the
 \textit{result\_count.sh} script will be executed. This script takes care of searching
 and sorting the results by arranging them and putting them in a new folder.
-%explain the categories when it is more clear
+%explain the categories when it is clearer
 
 \section{Use of exceptions}
-We also needed a way to find which binaries were using exception. Using
+We also needed a way to find which binaries were using exceptions. Using
 pyelftools, we noticed that all binary files using exceptions also had a call
 instruction to \verb|__cxa_begin_catch@plt| function or
 \verb|__cxa_allocate_exception@plt|, both in the plt section. So we just looked
@@ -473,21 +490,21 @@ in the \textit{.rela.plt} section and search for the
 \textit{elfexceptions.py}
 
 
-All the scripts used can be found in the GitHub
+All the scripts used can be found on the GitHub
 \href{https://github.com/ha2san/debian_docker/tree/main/scripts}{repository}~\cite{repo}.
+
 
 %%%%%%%%%%%%%%%%%%%
 \chapter{Evaluation}
 %%%%%%%%%%%%%%%%%%%
-
 In \autoref{table:popular}, you can see the result of our scripts on the most
-popular pacakges in \textit{Debian}. The \autoref{table:remaining}
-corresponds to the remaining packages found in other list. The
+popular packages in \textit{Debian}. The \autoref{table:remaining}
+corresponds to the remaining packages found in the other list. The
 \textit{discard} line corresponds to the packages where the program was not
 testable, e.g., running them with \textit{--help} leads to a crash or an error. 
 The category "\textit{unsuccessful compilation}" means that we were not able to
-compile the re-assembled assembly back to an executable for various reason as
-missing shared-libraries or the assembly file contains some error. It was not
+compile the re-assembled assembly back to an executable for various reasons as
+missing shared libraries or the assembly file contains some error. It was not
 possible to categorize these errors as \textit{clang} always outputs the same
 error in each situation: "\texttt{<unknown>:0: error: Undefined temporary symbol .L26312 }".
 The "\texttt{runtime error}" category corresponds to when we succeed to run
@@ -533,12 +550,12 @@ the modified executable but a segmentation fault was encountered.
 
 As you can see in these figures, the most dominant category is the
 "\textit{unsuccessful compilation}" one. Only a few programs crashed at
-runtime.We conclude that an improvement can be made in the assembly file
+runtime. We conclude that an improvement can be made in the assembly file
 generation but the good thing is that very few programs crash once the
 executable is compiled.  
 
 By reading the \sysname paper~\cite{dinesh20oakland}, we understand that
-the biggest issue with adding \textit{C++} support was to handle symbolization
+the biggest issue with adding \textit{C++} support was handling symbolization
 of exception handlers. It seems that is not yet fully supported as testing a
 simple program using exception leads to a runtime error:
 
@@ -549,10 +566,11 @@ segmentation fault.
 We wanted to see for all the packages, which one fails and was using
 exceptions. The result can be seen in \autoref{table:exception}.
 
-As you can see, most of the segmentation fault were encountered with programs
-using exception. The difference is not that big, but we see that the compilation
+As you can see, most of the segmentation faults were encountered with programs
+using exceptions. The difference is not that big, but we see that the compilation
 was more successful when the program was using exceptions. We understand from
 the test done that the program crashes only if he gets in a catch clause.
+
 
 \begin{table}[H]
     \centering
@@ -583,7 +601,6 @@ the test done that the program crashes only if he gets in a catch clause.
     \end{tabular}
     \caption{Packages not using exceptions}
 \end{table}
-
 Another observation that can be made is that the size of the executable
 matters. As you can see in \autoref{fig:sizes}, the number of executables that
 could be compiled and run drops drastically to 0 as the file size increases. In
@@ -594,9 +611,10 @@ usage.
 
 Take into consideration that the file sizes shown here correspond to stripped
 executables. But we used \sysname on their non-striped versions.
-Unfortunately, we no longer had the unstriped versions and recompiling each
+Unfortunately, we no longer had the unstriped versions, and recompiling each
 package would have taken us too long. These figures given are therefore only
 representative.
+
 
 \begin{figure}[H]
     \includegraphics[width=\linewidth]{chart.png} 
@@ -635,8 +653,8 @@ representative.
     \caption{classification of packages according to their size}
 \end{table}
 
-We also chose to test a program not using exceptions in order to see exactly how the
-new generated executable behaves. We have chosen as program
+We also chose to test a program not using exceptions to see exactly how the
+newly generated executable behaves. We have chosen as program
 fish-shell~\cite{fish}. Unfortunately, we were unable to recompile the program.
 The errors obtained lead us to understand that there was an error concerning
 the shared library libstdc++.so.6. Despite our research, it was quite difficult
@@ -646,8 +664,8 @@ for us to find the exact cause of the problem. We leave this as future work.
 \end{lstlisting}
 
 During our tests, we were able to discover some problems and reported them to
-the developers. The first being that some assembly files can only be
-transformed into executable format using clang and not gcc. Another issue was
+the developers. The first is that some assembly files can only be
+transformed into an executable format using clang and not GCC. Another issue was
 that the compiler seemed to not recognize certain sections in the assembly
 file. A solution was then offered in the comments when the issue was written
 where a user simply proposed to remove all references to these sections.
@@ -660,9 +678,9 @@ where a user simply proposed to remove all references to these sections.
 In general, \sysname worked on a lot of packages, and we encountered few runtime
 errors. The main problem was that it was not possible to compile the
 re-assembled assembly back on most of the packages. The results also showed
-that \sysname can not hanlde exceptions yet. Similarly, \sysname seems to
+that \sysname can not handle exceptions yet. Similarly, \sysname seems to
 encounter errors with large file sizes. We also had to find the shared-libraries
-ourselves. It would be an enhancement if retrowrite could do it for x86 CPU as
+ourselves. It would be an enhancement if \sysname could do it for x86 CPU as
 it seems that this option is only available for \textit{ARM}
 cpu~\cite{retroArm}.
 
