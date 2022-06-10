@@ -172,6 +172,10 @@ executable: the \texttt{ELF} format.
 The dominant executable format for binary in Unix system is the
 ELF\footnote{Executable and Linkable Format} format. 
 
+It is important to know the format of the binary file since we need to know
+where to find important information during the analysis. \sysname focuses on
+ELF format files and uses the \textit{pyelftools} tool.
+
 
 An executable file respecting the ELF format must follow a certain layout. At
 first, it must have an ELF header followed by a program header table or a section
@@ -566,6 +570,7 @@ representative.
     \label{fig:sizes}
 \end{figure}
 
+
 \begin{table}[H]
     \begin{tabular}{llll}
         \hline
@@ -593,7 +598,18 @@ representative.
         2.08 MB-47.55 MB    & 0                            & 1                                 & 51    \\                               
         \hline
     \end{tabular}
+    \caption{classification of packages according to their size}
 \end{table}
+
+We also chose to test a program not using exceptions in order to see exactly how the
+new generated executable behaves. We have chosen as program
+fish-shell~\cite{fish}. Unfortunately, we were unable to recompile the program.
+The errors obtained lead us to understand that there was an error concerning
+the shared library libstdc++.so.6. Despite our research, it was quite difficult
+for us to find the exact cause of the problem.
+\begin{lstlisting}[language=bash]
+/usr/bin/ld: _ZSt15__once_callable: TLS definition in /usr/lib/libstdc++.so.6 section .tbss mismatches non-TLS reference in /tmp/ccAGaHdi.o
+\end{lstlisting}
 
 During our tests, we were able to discover some problems and reported them to
 the developers. The first being that some assembly files can only be
@@ -620,7 +636,6 @@ cpu~\cite{retroArm}.
 \phantomsection
 \addcontentsline{toc}{chapter}{Bibliography}
 \printbibliography
-
 % Appendices are optional
 % \appendix
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
