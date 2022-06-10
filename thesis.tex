@@ -115,7 +115,7 @@ the use of an equivalent open-source application.  This can be a security
 problem as it is difficult for the community to discover new bugs. Indeed,
 techniques such as fuzzing or memory sanitization can only be applied by
 applying instrumentation at compilation time. Fortunately, a technique named
-\textit{binary rewritting} makes it possible to insert instrumentation without
+\textit{binary rewriting} makes it possible to insert instrumentation without
 having access to the source code.
 
 
@@ -139,8 +139,8 @@ We first wanted to integrate the work done in the \textit{Hextype} project into
 \sysname, but we noticed that this work was too ambitious and could not be done in
 such a short time. And since the integration of C++ support has been done in
 the meantime, we decided to focus our work on testing \sysname on a large
-number of packages to get an overview of the performance and the
-reliability of \sysname. To obtain a variety of programs to test, we chose to
+number of packages to get an overview of its performance and its  
+reliability. To obtain a variety of programs to test, we chose to
 take the packages used in the \textit{Debian} distribution. By this, we can use
 real programs used by users and see how \sysname works.
 
@@ -265,7 +265,7 @@ nearly impossible to get the program compiled with the instrumentation needed.
 Tools such as binary rewriters can be used to face this issue.
 
 
-\section{Binary rewritting}
+\section{Binary rewriting}
 Binary rewriting consists of modifying an executable in the absence of source
 code while maintaining functionality. It can be used for multiple reasons 
 for example for program optimization, program obfuscation, or as in the case of
@@ -293,16 +293,16 @@ Contrary to dynamic instrumentation, static rewriters operate on binaries
 at static time. It outputs a new binary executable that corresponds to the
 initial executable but is rewritten. This generated executable has the advantage
 of being almost as fast as the original executable that would have been
-compiled for instrumentation as the overhead introduced are usually low.
+compiled for instrumentation as the overhead introduced is usually low.
 
 
 
-\subsection{Steps in binary rewritting}
+\subsection{Steps in binary rewriting}
 Both dynamic and static instrumentation follows four main steps:
 \begin{enumerate}
     \item Parsing:
         This step consists of obtaining the instruction stream from the binary
-        and pass it to a disassembler.
+        and passing it to a disassembler.
     \item Analysis:
         This part consists of gaining as much information as possible. The
         objective is to recover the structure of the source code.
@@ -320,7 +320,7 @@ Both dynamic and static instrumentation follows four main steps:
 \begin{enumerate}
     \item Parsing:
         This step consists of obtaining the instruction stream from the binary
-        and pass it to a disassembler.
+        and passing it to a disassembler.
     \item Analysis:
         This part consists of gaining as much information as possible. The
         objective is to recover the structure of the source code.
@@ -376,14 +376,14 @@ of software. For example, one might want to use \textit{HexType} to enforce
 type safety.
 
 \subsection{HexType}
-\textit{HexType} is a tool written by the \textit{HexHive} lab in order to
+\textit{HexType} is a tool written by the \textit{HexHive} lab to
 detect type confusion in software written in \textit{C++}. Typecast is when a
 pointer of a certain type is converted into another. Typecast are
 normally checked statically. The vulnerability lies in the fact that
 down-casting is allowed. Down-casting means transforming a pointer representing
 a class into one of its descendants as seen in the code example. This can lead
 to type confusion as no one prevents the program to cast an object of
-an incompatible base type. \textit{HexType} remedy this issue by transforming
+an incompatible base type. \textit{HexType} remedies this issue by transforming
 static checks into runtime checks.
 
 \lstinputlisting[language=C++,caption=Example of type confusion]{type_confusion.cpp}
